@@ -1,8 +1,6 @@
 #FROM ubuntu:latest
 FROM nvidia/cuda:9.1-devel-ubuntu16.04
 
-MAINTAINER sih4sing5hong5
-
 ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get update -qq
@@ -16,11 +14,10 @@ RUN apt-get install -y \
 COPY . /usr/local/kaldi
 
 WORKDIR /usr/local/kaldi/tools
-RUN extras/check_dependencies.sh
-RUN make -j4
+RUN extras/check_dependencies.sh && make -j8 && find . -name '*.o' -delete
 
 WORKDIR /usr/local/kaldi/src
-RUN ./configure
-RUN make depend -j4
-RUN make -j4
+RUN ./configure --shared && make depend -j8 && make -j8 && find . -name '*.o' -delete
 
+WORKDIR /usr/local/kaldi/egs/apiai_decode/s5
+RUN ./download-model.sh && rm -f *.zip
