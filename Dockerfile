@@ -32,14 +32,14 @@ RUN find . -name '*.tar.bz2' -delete
 WORKDIR /usr/local/kaldi/egs/apiai_decode/s5
 RUN ./download-model.sh
 RUN rm -f *.zip
-RUN wget https://github.com/mozilla/DeepSpeech/blob/master/data/smoke_test/LDC93S1.wav
-RUN ./recognize-wav.sh LDC93S1.wav
+#RUN wget https://github.com/mozilla/DeepSpeech/blob/master/data/smoke_test/LDC93S1.wav
+#RUN ./recognize-wav.sh LDC93S1.wav
 
 FROM nvidia/cuda:9.1-devel-ubuntu16.04 as run
 
 RUN apt-get update -qq
-RUN apt-get install -y wget sox python python3 zlib1g-dev libatlas-base
+RUN apt-get install -y wget sox python python3 zlib1g-dev libatlas-base-dev
 
 COPY --from=builder /usr/local/kaldi /usr/local/kaldi
 WORKDIR /usr/local/kaldi/egs/apiai_decode/s5
-RUN ./recognize-wav.sh LDC93S1.wav
+#RUN ./recognize-wav.sh LDC93S1.wav
